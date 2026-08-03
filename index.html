@@ -670,6 +670,7 @@ document.querySelectorAll("img.collage-image[data-photo]").forEach((img) => {
 const START_AT = 59;
 const TARGET_VOLUME = 0.3;
 let startPromise = null;
+let unlocked = false;
 
 function fadeInTo(target) {
     let v = music.volume || 0;
@@ -681,71 +682,58 @@ function fadeInTo(target) {
     }, 200);
 }
 
-function ensureMusic(userGesture) {
-    if (startPromise) return startPromise;
-
-    music.muted = !userGesture;
-    music.volume = 0;
-
+function trySetStartTime() {
     try {
         if (Number.isFinite(START_AT)) music.currentTime = START_AT;
     } catch {}
+}
 
-    startPromise = music.play().then(() => {
-        if (!userGesture) {
-            setTimeout(() => {
-                music.muted = false;
-                fadeInTo(TARGET_VOLUME);
-            }, 300);
-        } else {
+function unlockSound() {
+    if (unlocked) return;
+    unlocked = true;
+    music.muted = false;
+    fadeInTo(TARGET_VOLUME);
+}
+
+function registerUnlockOnAnyInteraction() {
+    const unlockOnce = () => unlockSound();
+    document.addEventListener("pointerdown", unlockOnce, { once: true });
+    document.addEventListener("touchstart", unlockOnce, { once: true, passive: true });
+    document.addEventListener("click", unlockOnce, { once: true });
+    document.addEventListener("keydown", unlockOnce, { once: true });
+    window.addEventListener("scroll", unlockOnce, { once: true, passive: true });
+}
+
+function ensureMusic() {
+    if (startPromise) return startPromise;
+
+    music.volume = 0;
+    trySetStartTime();
+
+    startPromise = Promise.resolve()
+        .then(() => {
             music.muted = false;
-            fadeInTo(TARGET_VOLUME);
-        }
-    }).catch((e) => {
-        startPromise = null;
-        throw e;
-    });
+            return music.play().then(() => {
+                unlocked = true;
+                fadeInTo(TARGET_VOLUME);
+            });
+        })
+        .catch(() => {
+            music.muted = true;
+            music.volume = 0;
+            trySetStartTime();
+            return music.play();
+        })
+        .catch(() => {
+            startPromise = null;
+            return Promise.resolve();
+        });
 
     return startPromise;
 }
 
-function showTapOverlay() {
-    if (document.getElementById("tapToPlayOverlay")) return;
-
-    const overlay = document.createElement("div");
-    overlay.id = "tapToPlayOverlay";
-    overlay.style.position = "fixed";
-    overlay.style.inset = "0";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "2000";
-    overlay.style.background = "rgba(0,0,0,0.55)";
-    overlay.style.backdropFilter = "blur(6px)";
-    overlay.style.webkitBackdropFilter = "blur(6px)";
-    overlay.style.fontSize = "16px";
-    overlay.style.textAlign = "center";
-    overlay.style.padding = "24px";
-    overlay.innerHTML = `<div style="max-width: 420px; line-height: 1.4;"><div style="font-size: 22px; margin-bottom: 10px;">🎵</div><div>Tap anywhere to enable sound</div></div>`;
-    document.body.appendChild(overlay);
-
-    const unlock = () => {
-        ensureMusic(true).finally(() => {
-            overlay.remove();
-            document.removeEventListener("pointerdown", unlock);
-            document.removeEventListener("touchstart", unlock);
-            document.removeEventListener("click", unlock);
-            document.removeEventListener("keydown", unlock);
-        });
-    };
-
-    document.addEventListener("pointerdown", unlock, { once: true });
-    document.addEventListener("touchstart", unlock, { once: true, passive: true });
-    document.addEventListener("click", unlock, { once: true });
-    document.addEventListener("keydown", unlock, { once: true });
-}
-
-ensureMusic(false).catch(() => showTapOverlay());
+registerUnlockOnAnyInteraction();
+ensureMusic();
 
 /* Snow */
 const snowInterval = setInterval(() => {
