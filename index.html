@@ -668,7 +668,7 @@ document.querySelectorAll("img.collage-image[data-photo]").forEach((img) => {
 });
 
 const START_AT = 59;
-const TARGET_VOLUME = 0.3;
+const TARGET_VOLUME = 1;
 let startPromise = null;
 let unlocked = false;
 
@@ -676,10 +676,10 @@ function fadeInTo(target) {
     let v = music.volume || 0;
     music.volume = v;
     const id = setInterval(() => {
-        v = Math.min(v + 0.05, target);
+        v = Math.min(v + 0.1, target);
         music.volume = v;
         if (v >= target) clearInterval(id);
-    }, 200);
+    }, 120);
 }
 
 function trySetStartTime() {
