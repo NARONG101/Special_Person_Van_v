@@ -525,44 +525,44 @@ audio { display: none; }
             <div class="collage-grid">
                 <!-- Row 1 -->
                 <div class="collage-photo">
-                    <img src="Data/1.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="1" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/2.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="2" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/3.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="3" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/4.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="4" loading="lazy">
                 </div>
                  
                 <!-- Row 2 -->
                 <div class="collage-photo">
-                    <img src="Data/5.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="5" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/6.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="6" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/7.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="7" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/8.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="8" loading="lazy">
                 </div>
                  
                 <!-- Row 3 -->
                 <div class="collage-photo">
-                    <img src="Data/9.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="9" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/1.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="1" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/2.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="2" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/3.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="3" loading="lazy">
                 </div>
             </div>
              
@@ -570,44 +570,44 @@ audio { display: none; }
             <div class="collage-grid">
                 <!-- Row 1 -->
                 <div class="collage-photo">
-                    <img src="Data/1.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="1" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/2.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="2" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/3.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="3" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/4.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="4" loading="lazy">
                 </div>
                  
                 <!-- Row 2 -->
                 <div class="collage-photo">
-                    <img src="Data/5.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="5" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/6.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="6" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/7.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="7" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/8.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="8" loading="lazy">
                 </div>
                  
                 <!-- Row 3 -->
                 <div class="collage-photo">
-                    <img src="Data/9.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="9" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/1.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="1" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/2.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="2" loading="lazy">
                 </div>
                 <div class="collage-photo">
-                    <img src="Data/3.jpg" class="collage-image">
+                    <img class="collage-image" data-photo="3" loading="lazy">
                 </div>
             </div>
         </div>
@@ -623,7 +623,7 @@ audio { display: none; }
     <p>
         Every moment 🕰️, every smile 😊, every memory 💕 with you
         is my greatest happiness 💝♾️
-    </p
+    </p>
 </div>
 
 </div>
@@ -633,8 +633,7 @@ audio { display: none; }
 <!-- 🎵 MUSIC -->
 <audio id="music" loop preload="auto" controls style="display:none;">
     <source src="Data/love.mp3" type="audio/mpeg">
-    <source src="Data/love.mp3" type="audio/mp3">
-    <source src="Data/love.mp3" type="audio/x-mpeg">
+    <source src="love.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
 
@@ -647,6 +646,26 @@ audio { display: none; }
 <script>
 const intro = document.getElementById("intro");
 const music = document.getElementById("music");
+
+function setWithFallback(el, urls) {
+    let i = 0;
+    const next = () => {
+        if (i >= urls.length) return;
+        el.src = urls[i++];
+    };
+    el.addEventListener("error", next);
+    next();
+}
+
+document.querySelectorAll("img.collage-image[data-photo]").forEach((img) => {
+    const n = img.dataset.photo;
+    setWithFallback(img, [
+        `Data/${n}.JPG`,
+        `Data/${n}.jpg`,
+        `${n}.JPG`,
+        `${n}.jpg`
+    ]);
+});
 
 /* Initialize audio with error handling */
 music.addEventListener('error', function(e) {
