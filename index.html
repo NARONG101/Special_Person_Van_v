@@ -631,7 +631,7 @@ audio { display: none; }
 </div>
 
 <!-- 🎵 MUSIC -->
-<audio id="music" loop preload="auto" controls style="display:none;">
+<audio id="music" loop preload="auto" autoplay muted playsinline style="display:none;">
     <source src="Data/love.mp3" type="audio/mpeg">
     <source src="love.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -667,90 +667,85 @@ document.querySelectorAll("img.collage-image[data-photo]").forEach((img) => {
     ]);
 });
 
-/* Initialize audio with error handling */
-music.addEventListener('error', function(e) {
-    console.error('Audio error:', e);
-});
+const START_AT = 59;
+const TARGET_VOLUME = 0.3;
+let startPromise = null;
 
-music.addEventListener('canplay', function() {
-    console.log('Audio can play');
-});
-
-music.addEventListener('canplaythrough', function() {
-    console.log('Audio can play through');
-});
-
-/* Try to autoplay with muted sound first (browser policy workaround) */
-function tryAutoPlay() {
-    music.volume = 0; // Start muted to comply with autoplay policies
-    music.currentTime = 59;
-    music.play().then(() => {
-        console.log("Autoplay started (muted)");
-         
-        // Gradually fade in volume after a short delay
-        setTimeout(() => {
-            const fadeIn = setInterval(() => {
-                if (music.volume < 0.3) {
-                    music.volume = Math.min(music.volume + 0.05, 0.3);
-                } else {
-                    clearInterval(fadeIn);
-                }
-            }, 200);
-        }, 1000);
-         
-    }).catch(error => {
-        console.log("Autoplay failed (expected due to browser policy):", error);
-        // Fall back to click-to-play
-        setupClickToPlay();
-    });
+function fadeInTo(target) {
+    let v = music.volume || 0;
+    music.volume = v;
+    const id = setInterval(() => {
+        v = Math.min(v + 0.05, target);
+        music.volume = v;
+        if (v >= target) clearInterval(id);
+    }, 200);
 }
 
-/* Fallback: Play music on user interaction */
-function setupClickToPlay() {
-    function tryPlayMusic() {
-        music.volume = 0.3; // Perfect background volume (30%)
-         
-        // Try to set currentTime (some browsers restrict this before play)
-        try {
-            music.currentTime = 59; // Start playing from 59 seconds
-        } catch (e) {
-            console.log("Cannot set currentTime before play:", e);
-            music.currentTime = 0;
+function ensureMusic(userGesture) {
+    if (startPromise) return startPromise;
+
+    music.muted = !userGesture;
+    music.volume = 0;
+
+    try {
+        if (Number.isFinite(START_AT)) music.currentTime = START_AT;
+    } catch {}
+
+    startPromise = music.play().then(() => {
+        if (!userGesture) {
+            setTimeout(() => {
+                music.muted = false;
+                fadeInTo(TARGET_VOLUME);
+            }, 300);
+        } else {
+            music.muted = false;
+            fadeInTo(TARGET_VOLUME);
         }
-         
-        music.play().then(() => {
-            console.log("Music started successfully");
-        }).catch(error => {
-            console.error("Music play failed:", error);
-        });
-         
-        document.removeEventListener('click', tryPlayMusic);
-        document.removeEventListener('touchstart', tryPlayMusic);
-    }
-     
-    document.addEventListener('click', tryPlayMusic);
-    document.addEventListener('touchstart', tryPlayMusic);
-     
-    // Add instruction for user
-    const instruction = document.createElement('div');
-    instruction.style.position = 'fixed';
-    instruction.style.bottom = '20px';
-    instruction.style.left = '50%';
-    instruction.style.transform = 'translateX(-50%)';
-    instruction.style.color = 'white';
-    instruction.style.fontSize = '16px';
-    instruction.style.zIndex = '1000';
-    instruction.style.backgroundColor = 'rgba(0,0,0,0.5)';
-    instruction.style.padding = '10px 20px';
-    instruction.style.borderRadius = '20px';
-    instruction.style.pointerEvents = 'none';
-    instruction.textContent = '🎵 Click anywhere to start background music';
-    document.body.appendChild(instruction);
-    setTimeout(() => instruction.remove(), 10000);
+    }).catch((e) => {
+        startPromise = null;
+        throw e;
+    });
+
+    return startPromise;
 }
 
-// Try autoplay first
-tryAutoPlay();
+function showTapOverlay() {
+    if (document.getElementById("tapToPlayOverlay")) return;
+
+    const overlay = document.createElement("div");
+    overlay.id = "tapToPlayOverlay";
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "2000";
+    overlay.style.background = "rgba(0,0,0,0.55)";
+    overlay.style.backdropFilter = "blur(6px)";
+    overlay.style.webkitBackdropFilter = "blur(6px)";
+    overlay.style.fontSize = "16px";
+    overlay.style.textAlign = "center";
+    overlay.style.padding = "24px";
+    overlay.innerHTML = `<div style="max-width: 420px; line-height: 1.4;"><div style="font-size: 22px; margin-bottom: 10px;">🎵</div><div>Tap anywhere to enable sound</div></div>`;
+    document.body.appendChild(overlay);
+
+    const unlock = () => {
+        ensureMusic(true).finally(() => {
+            overlay.remove();
+            document.removeEventListener("pointerdown", unlock);
+            document.removeEventListener("touchstart", unlock);
+            document.removeEventListener("click", unlock);
+            document.removeEventListener("keydown", unlock);
+        });
+    };
+
+    document.addEventListener("pointerdown", unlock, { once: true });
+    document.addEventListener("touchstart", unlock, { once: true, passive: true });
+    document.addEventListener("click", unlock, { once: true });
+    document.addEventListener("keydown", unlock, { once: true });
+}
+
+ensureMusic(false).catch(() => showTapOverlay());
 
 /* Snow */
 const snowInterval = setInterval(() => {
