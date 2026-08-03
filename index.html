@@ -13,8 +13,14 @@ body {
     margin: 0;
     background: black;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: white;
+    line-height: 1.5;
+}
+
+/* Ensure minimum font sizes for readability */
+.type, .heart, .xmas, h1, p {
+    font-size: 14px;
 }
 
 /* 📱 Responsive Screen Size */
@@ -30,37 +36,75 @@ body {
 /* Responsive font sizes */
 @media (max-width: 768px) {
     .type {
-        font-size: 3vw;
+        font-size: 3.5vw;
     }
     .heart {
-        font-size: 6vw;
+        font-size: 7vw;
     }
     .xmas {
-        font-size: 3vw;
+        font-size: 3.5vw;
     }
     h1 {
-        font-size: 12vw;
+        font-size: 14vw;
     }
     p {
-        font-size: 3vw;
+        font-size: 3.5vw;
     }
 }
 
 @media (max-width: 480px) {
     .type {
-        font-size: 4vw;
+        font-size: 4.5vw;
     }
     .heart {
-        font-size: 8vw;
+        font-size: 9vw;
     }
     .xmas {
-        font-size: 4vw;
+        font-size: 4.5vw;
     }
     h1 {
-        font-size: 15vw;
+        font-size: 17vw;
     }
     p {
-        font-size: 4vw;
+        font-size: 4.5vw;
+    }
+}
+
+/* Very small screens (e.g., mobile devices) */
+@media (max-width: 360px) {
+    .type {
+        font-size: 5.5vw;
+    }
+    .heart {
+        font-size: 12vw;
+    }
+    .xmas {
+        font-size: 5.5vw;
+    }
+    h1 {
+        font-size: 22vw;
+    }
+    p {
+        font-size: 5.5vw;
+    }
+}
+
+/* Extremely small screens */
+@media (max-width: 320px) {
+    .type {
+        font-size: 6vw;
+    }
+    .heart {
+        font-size: 14vw;
+    }
+    .xmas {
+        font-size: 6vw;
+    }
+    h1 {
+        font-size: 25vw;
+    }
+    p {
+        font-size: 6vw;
     }
 }
 
@@ -95,6 +139,7 @@ body {
     opacity: 0;
     animation: introTextFade 2s ease forwards;
     animation-delay: 3s;
+    text-shadow: 0 0 6px rgba(255,255,255,0.8);
 }
 
 @keyframes introTextFade {
@@ -388,6 +433,7 @@ img {
 
 
 
+
 /* Vignette */
 .vignette {
     position: absolute;
@@ -479,89 +525,89 @@ audio { display: none; }
             <div class="collage-grid">
                 <!-- Row 1 -->
                 <div class="collage-photo">
-                    <img src="1.jpg" class="collage-image">
+                    <img src="Data/1.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="2.jpg" class="collage-image">
+                    <img src="Data/2.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="3.jpg" class="collage-image">
+                    <img src="Data/3.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="4.jpg" class="collage-image">
+                    <img src="Data/4.jpg" class="collage-image">
                 </div>
-                
+                 
                 <!-- Row 2 -->
                 <div class="collage-photo">
-                    <img src="5.jpg" class="collage-image">
+                    <img src="Data/5.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="6.jpg" class="collage-image">
+                    <img src="Data/6.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="7.jpg" class="collage-image">
+                    <img src="Data/7.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="8.jpg" class="collage-image">
+                    <img src="Data/8.jpg" class="collage-image">
                 </div>
-                
+                 
                 <!-- Row 3 -->
                 <div class="collage-photo">
-                    <img src="9.jpg" class="collage-image">
+                    <img src="Data/9.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="1.jpg" class="collage-image">
+                    <img src="Data/1.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="2.jpg" class="collage-image">
+                    <img src="Data/2.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="3.jpg" class="collage-image">
+                    <img src="Data/3.jpg" class="collage-image">
                 </div>
             </div>
-            
+             
             <!-- Second set - creates seamless loop -->
             <div class="collage-grid">
                 <!-- Row 1 -->
                 <div class="collage-photo">
-                    <img src="1.jpg" class="collage-image">
+                    <img src="Data/1.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="2.jpg" class="collage-image">
+                    <img src="Data/2.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="3.jpg" class="collage-image">
+                    <img src="Data/3.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="4.jpg" class="collage-image">
+                    <img src="Data/4.jpg" class="collage-image">
                 </div>
-                
+                 
                 <!-- Row 2 -->
                 <div class="collage-photo">
-                    <img src="5.jpg" class="collage-image">
+                    <img src="Data/5.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="6.jpg" class="collage-image">
+                    <img src="Data/6.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="7.jpg" class="collage-image">
+                    <img src="Data/7.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="8.jpg" class="collage-image">
+                    <img src="Data/8.jpg" class="collage-image">
                 </div>
-                
+                 
                 <!-- Row 3 -->
                 <div class="collage-photo">
-                    <img src="9.jpg" class="collage-image">
+                    <img src="Data/9.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="1.jpg" class="collage-image">
+                    <img src="Data/1.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="2.jpg" class="collage-image">
+                    <img src="Data/2.jpg" class="collage-image">
                 </div>
                 <div class="collage-photo">
-                    <img src="3.jpg" class="collage-image">
+                    <img src="Data/3.jpg" class="collage-image">
                 </div>
             </div>
         </div>
@@ -577,7 +623,7 @@ audio { display: none; }
     <p>
         Every moment 🕰️, every smile 😊, every memory 💕 with you
         is my greatest happiness 💝♾️
-    </p>
+    </p
 </div>
 
 </div>
@@ -586,9 +632,9 @@ audio { display: none; }
 
 <!-- 🎵 MUSIC -->
 <audio id="music" loop preload="auto" controls style="display:none;">
-    <source src="love.mp3" type="audio/mpeg">
-    <source src="love.mp3" type="audio/mp3">
-    <source src="love.mp3" type="audio/x-mpeg">
+    <source src="Data/love.mp3" type="audio/mpeg">
+    <source src="Data/love.mp3" type="audio/mp3">
+    <source src="Data/love.mp3" type="audio/x-mpeg">
     Your browser does not support the audio element.
 </audio>
 
@@ -621,7 +667,7 @@ function tryAutoPlay() {
     music.currentTime = 59;
     music.play().then(() => {
         console.log("Autoplay started (muted)");
-        
+         
         // Gradually fade in volume after a short delay
         setTimeout(() => {
             const fadeIn = setInterval(() => {
@@ -632,7 +678,7 @@ function tryAutoPlay() {
                 }
             }, 200);
         }, 1000);
-        
+         
     }).catch(error => {
         console.log("Autoplay failed (expected due to browser policy):", error);
         // Fall back to click-to-play
@@ -644,7 +690,7 @@ function tryAutoPlay() {
 function setupClickToPlay() {
     function tryPlayMusic() {
         music.volume = 0.3; // Perfect background volume (30%)
-        
+         
         // Try to set currentTime (some browsers restrict this before play)
         try {
             music.currentTime = 59; // Start playing from 59 seconds
@@ -652,20 +698,20 @@ function setupClickToPlay() {
             console.log("Cannot set currentTime before play:", e);
             music.currentTime = 0;
         }
-        
+         
         music.play().then(() => {
             console.log("Music started successfully");
         }).catch(error => {
             console.error("Music play failed:", error);
         });
-        
+         
         document.removeEventListener('click', tryPlayMusic);
         document.removeEventListener('touchstart', tryPlayMusic);
     }
-    
+     
     document.addEventListener('click', tryPlayMusic);
     document.addEventListener('touchstart', tryPlayMusic);
-    
+     
     // Add instruction for user
     const instruction = document.createElement('div');
     instruction.style.position = 'fixed';
@@ -730,13 +776,13 @@ setTimeout(() => {
     clearInterval(snowInterval);
     clearInterval(heartInterval);
     clearInterval(starInterval);
-    
+     
     // Smooth transition with fade and zoom effect
     intro.style.transition = "all 2.5s ease-in-out";
     intro.style.filter = "blur(12px)";
     intro.style.opacity = 0;
     intro.style.transform = "scale(1.1)";
-    
+     
     setTimeout(() => intro.remove(), 2500);
 }, 12000);
 
